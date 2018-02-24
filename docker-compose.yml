@@ -1,0 +1,29 @@
+version: '3'
+services:
+  web:
+    build: ./docker
+    image: php56-cakephp-master-slave
+    hostname: web
+    container_name: web
+    volumes:
+      - .:/var/www:cached
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    hostname: db
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    volumes:
+      - ./db/data:/var/lib/mysql:cached
+      - ./db/conf.d:/etc/mysql/conf.d:cached
+      - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:cached
+    ports:
+      - "3306:3306"

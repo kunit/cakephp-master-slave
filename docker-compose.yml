@@ -6,9 +6,9 @@ services:
     hostname: web
     container_name: web
     volumes:
-      - .:/var/www:cached
+      - .:/var/www/html:cached
     ports:
-      - "80:80"
+      - "8000:80"
     depends_on:
       - db
 

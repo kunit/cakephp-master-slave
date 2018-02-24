@@ -1,3 +1,44 @@
-.DS_Store
+!.gitkeep
 
-db/data/
+# Docker generated files #
+##########################
+/db/data/
+
+# User specific & automatically generated files #
+#################################################
+/lib/Cake/Console/Templates/skel/tmp/
+/plugins
+/vendors
+/build
+/dist
+/tags
+*.mo
+
+/app/Plugin
+/app/Vendor
+/app/tmp/cache/models
+/app/tmp/cache/persistent
+/app/tmp/cache/views
+/app/tmp/logs
+/app/tmp/sessions
+/app/tmp/tests
+
+# IDE and editor specific files #
+#################################
+/nbproject
+.idea
+/.project
+/.buildpath
+/.settings/
+*.swp
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db

@@ -1,8 +1,12 @@
 <?php
 /**
- * Article Fixture
+ * ArticleSlave Fixture
  */
-class ArticleFixture extends CakeTestFixture {
+class ArticleSlaveFixture extends CakeTestFixture {
+
+	public $useDbConfig = 'test_slave';
+
+	public $table = 'articles';
 
 	/**
 	 * Fields

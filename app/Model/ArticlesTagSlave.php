@@ -1,22 +1,21 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('ArticleTag', 'Model');
 
 /**
- * ArticlesTag Model
+ * ArticlesTagSlave Model
  *
- * @property Article $Article
- * @property Tag $Tag
+ * @property ArticleSlave $Article
+ * @property TagSlave $Tag
  * @method ArticlesTag useMaster()
  * @method ArticlesTagSlave useSlave()
  */
-class ArticlesTag extends AppModel {
+class ArticlesTagSlave extends ArticlesTag
+{
+	public $alias = 'ArticlesTag';
 
-	public $useDbConfig = 'default';
+	public $useDbConfig = 'slave';
 
-	public $actsAs = array(
-		'Containable',
-		'MasterSlave',
-	);
+	public $useTable = 'articles_tags';
 
 	/**
 	 * belongsTo associations
@@ -25,14 +24,14 @@ class ArticlesTag extends AppModel {
 	 */
 	public $belongsTo = array(
 		'Article' => array(
-			'className' => 'Article',
+			'className' => 'ArticleSlave',
 			'foreignKey' => 'article_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
 		'Tag' => array(
-			'className' => 'Tag',
+			'className' => 'TagSlave',
 			'foreignKey' => 'tag_id',
 			'conditions' => '',
 			'fields' => '',

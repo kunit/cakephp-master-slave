@@ -1,8 +1,12 @@
 <?php
 /**
- * User Fixture
+ * UserSlave Fixture
  */
-class UserFixture extends CakeTestFixture {
+class UserSlaveFixture extends CakeTestFixture {
+
+	public $useDbConfig = 'test_slave';
+
+	public $table = 'users';
 
 	/**
 	 * Fields

@@ -1,8 +1,12 @@
 <?php
 /**
- * ArticlesTag Fixture
+ * ArticlesSlaveTag Fixture
  */
-class ArticlesTagFixture extends CakeTestFixture {
+class ArticlesTagSlaveFixture extends CakeTestFixture {
+
+	public $useDbConfig = 'test_slave';
+
+	public $table = 'articles_tags';
 
 	/**
 	 * Fields

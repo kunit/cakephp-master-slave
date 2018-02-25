@@ -4,11 +4,11 @@
  */
 class TagFixture extends CakeTestFixture {
 
-/**
- * Fields
- *
- * @var array
- */
+	/**
+	 * Fields
+	 *
+	 * @var array
+	 */
 	public $fields = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'title' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 191, 'key' => 'unique', 'collate' => 'utf8mb4_general_ci', 'charset' => 'utf8mb4'),

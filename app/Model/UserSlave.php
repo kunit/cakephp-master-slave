@@ -1,28 +1,20 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('User', 'Model');
 
 /**
- * User Model
+ * UserSlave Model
  *
- * @property Article $Article
+ * @property ArticleSlave $Article
  * @method User useMaster()
  * @method UserSlave useSlave()
  */
-class User extends AppModel {
+class UserSlave extends User {
 
-	public $useDbConfig = 'default';
+	public $alias = 'User';
 
-	public $actsAs = array(
-		'Containable',
-		'MasterSlave',
-	);
+	public $useDbConfig = 'slave';
 
-	/**
-	 * Display field
-	 *
-	 * @var string
-	 */
-	public $displayField = 'email';
+	public $useTable = 'users';
 
 	/**
 	 * hasMany associations
@@ -31,7 +23,7 @@ class User extends AppModel {
 	 */
 	public $hasMany = array(
 		'Article' => array(
-			'className' => 'Article',
+			'className' => 'ArticleSlave',
 			'foreignKey' => 'user_id',
 			'dependent' => false,
 			'conditions' => '',

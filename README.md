@@ -59,3 +59,5 @@ $this->User = ClassRegistry::init('User');
 
 $users = $this->User->useSlave()->find('all');
 ```
+
+`$this->User->useSlave()` の返却値は、 `UserSlave` モデルのインスタンスになる

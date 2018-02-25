@@ -9,16 +9,10 @@ class MasterSlaveBehavior extends ModelBehavior {
 	 */
 	public function useMaster(Model $model) {
 		$class = get_class($model);
-		$backupClass = $class;
 		$class = preg_replace('|Slave$|', '', $class);
 
 		ClassRegistry::removeObject($model->alias);
-		$masterModel = ClassRegistry::init($class);
-
-		ClassRegistry::removeObject($masterModel->alias);
-		ClassRegistry::init($backupClass);
-
-		return $masterModel;
+		return ClassRegistry::init($class);
 	}
 
 	/**
@@ -27,7 +21,6 @@ class MasterSlaveBehavior extends ModelBehavior {
 	 */
 	public function useSlave(Model $model) {
 		$class = get_class($model);
-		$backupClass = $class;
 		$alias = $class;
 		$class .= 'Slave';
 
@@ -37,8 +30,10 @@ class MasterSlaveBehavior extends ModelBehavior {
 			'alias' => $alias,
 		));
 
+		// master のモデルに戻しておく
+		$class = preg_replace('|Slave$|', '', $class);
 		ClassRegistry::removeObject($slaveModel->alias);
-		ClassRegistry::init($backupClass);
+		ClassRegistry::init($class);
 
 		return $slaveModel;
 	}

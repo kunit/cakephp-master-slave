@@ -70,6 +70,18 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 		$user = ClassRegistry::init('User');
 		$this->assertSame('test', $user->useDbConfig);
 		$this->assertSame('test', $user->Article->useDbConfig);
+
+		$actual = $this->User->useMaster()->find('all');
+		$this->assertSame('test@example.co.jp', Hash::get($actual, '0.User.email'));
+		$this->assertSame('article test title', Hash::get($actual, '0.Article.0.title'));
+
+		$this->assertSame('test', $this->User->useDbConfig);
+		$this->assertSame('test', $this->User->Article->useDbConfig);
+
+		$user = ClassRegistry::init('User');
+		$this->assertSame('test', $user->useDbConfig);
+		$this->assertSame('test', $user->Article->useDbConfig);
+
 	}
 
 	/**
@@ -105,16 +117,12 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 	/**
 	 * @throws \Exception
 	 */
-	public function test_003_MasterにSaveして、Slaveからfindして、Masterからfindする() {
+	public function test_003_Slaveに切り替えて、Master戻してからfindする() {
 		$this->saveMaster();
 		$this->saveSlave();
 
-		$actual = $this->User->useSlave()->find('all');
-		$this->assertSame('test@example.co.jp', Hash::get($actual, '0.User.email'));
-		$this->assertSame('article test title', Hash::get($actual, '0.Article.0.title'));
-
 		/** @var User $user */
-		$user = $this->User->useMaster();
+		$user = $this->User->useSlave()->useMaster();
 
 		$this->assertSame('User', get_class($user));
 		$this->assertSame('test', $user->useDbConfig);

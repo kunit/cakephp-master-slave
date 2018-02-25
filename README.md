@@ -62,4 +62,4 @@ $users = $this->User->useSlave()->find('all');
 
 `$this->User->useSlave()` の返却値は、 `UserSlave` モデルのインスタンスになる
 
-また、useSlave をしたあとの、 `$this->User->Article` は、 `ArticleSlave' モデルのインスタンスになる
+また、useSlave をしたあとの、 `$this->User->Article` は、 `ArticleSlave` モデルのインスタンスになる

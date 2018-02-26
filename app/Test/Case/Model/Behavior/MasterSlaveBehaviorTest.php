@@ -64,22 +64,30 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 		$this->assertSame('test@example.co.jp', Hash::get($actual, '0.User.email'));
 		$this->assertSame('article test title', Hash::get($actual, '0.Article.0.title'));
 
+		$this->assertSame('User', get_class($this->User));
 		$this->assertSame('test', $this->User->useDbConfig);
+		$this->assertSame('Article', get_class($this->User->Article));
 		$this->assertSame('test', $this->User->Article->useDbConfig);
 
 		$user = ClassRegistry::init('User');
+		$this->assertSame('User', get_class($user));
 		$this->assertSame('test', $user->useDbConfig);
+		$this->assertSame('Article', get_class($user->Article));
 		$this->assertSame('test', $user->Article->useDbConfig);
 
 		$actual = $this->User->getMasterInstance()->find('all');
 		$this->assertSame('test@example.co.jp', Hash::get($actual, '0.User.email'));
 		$this->assertSame('article test title', Hash::get($actual, '0.Article.0.title'));
 
+		$this->assertSame('User', get_class($this->User));
 		$this->assertSame('test', $this->User->useDbConfig);
+		$this->assertSame('Article', get_class($this->User->Article));
 		$this->assertSame('test', $this->User->Article->useDbConfig);
 
 		$user = ClassRegistry::init('User');
+		$this->assertSame('User', get_class($user));
 		$this->assertSame('test', $user->useDbConfig);
+		$this->assertSame('Article', get_class($user->Article));
 		$this->assertSame('test', $user->Article->useDbConfig);
 
 	}
@@ -95,7 +103,13 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 
 		$this->assertSame('UserSlave', get_class($user));
 		$this->assertSame('test_slave', $user->useDbConfig);
+		$this->assertSame('ArticleSlave', get_class($user->Article));
 		$this->assertSame('test_slave', $user->Article->useDbConfig);
+
+		$this->assertSame('User', get_class($this->User));
+		$this->assertSame('test', $this->User->useDbConfig);
+		$this->assertSame('Article', get_class($this->User->Article));
+		$this->assertSame('test', $this->User->Article->useDbConfig);
 
 		$actual = $user->find('all');
 		$this->assertEmpty($actual);
@@ -106,11 +120,15 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 		$this->assertSame('test@example.co.jp', Hash::get($actual, '0.User.email'));
 		$this->assertSame('article test title', Hash::get($actual, '0.Article.0.title'));
 
+		$this->assertSame('User', get_class($this->User));
 		$this->assertSame('test', $this->User->useDbConfig);
+		$this->assertSame('Article', get_class($this->User->Article));
 		$this->assertSame('test', $this->User->Article->useDbConfig);
 
 		$user = ClassRegistry::init('User');
+		$this->assertSame('User', get_class($user));
 		$this->assertSame('test', $user->useDbConfig);
+		$this->assertSame('Article', get_class($user->Article));
 		$this->assertSame('test', $user->Article->useDbConfig);
 	}
 
@@ -126,15 +144,23 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 
 		$this->assertSame('User', get_class($user));
 		$this->assertSame('test', $user->useDbConfig);
+		$this->assertSame('Article', get_class($user->Article));
 		$this->assertSame('test', $user->Article->useDbConfig);
 
 		$actual = $user->find('all');
 		$this->assertSame('test@example.co.jp', Hash::get($actual, '0.User.email'));
 		$this->assertSame('article test title', Hash::get($actual, '0.Article.0.title'));
 
-		$this->User = ClassRegistry::init('User');
+		$this->assertSame('User', get_class($this->User));
 		$this->assertSame('test', $this->User->useDbConfig);
+		$this->assertSame('Article', get_class($this->User->Article));
 		$this->assertSame('test', $this->User->Article->useDbConfig);
+
+		$user = ClassRegistry::init('User');
+		$this->assertSame('User', get_class($user));
+		$this->assertSame('test', $user->useDbConfig);
+		$this->assertSame('Article', get_class($user->Article));
+		$this->assertSame('test', $user->Article->useDbConfig);
 	}
 
 	/**
@@ -230,15 +256,23 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 
 		$this->assertSame('UserSlave', get_class($user));
 		$this->assertSame('test_slave', $user->useDbConfig);
+		$this->assertSame('ArticleSlave', get_class($user->Article));
 		$this->assertSame('test_slave', $user->Article->useDbConfig);
 
 		$actual = $user->find('all');
 		$this->assertSame('test@example.co.jp', Hash::get($actual, '0.User.email'));
 		$this->assertSame('article test title', Hash::get($actual, '0.Article.0.title'));
 
-		$this->User = ClassRegistry::init('User');
+		$this->assertSame('User', get_class($this->User));
 		$this->assertSame('test', $this->User->useDbConfig);
+		$this->assertSame('Article', get_class($this->User->Article));
 		$this->assertSame('test', $this->User->Article->useDbConfig);
+
+		$user = ClassRegistry::init('User');
+		$this->assertSame('User', get_class($user));
+		$this->assertSame('test', $user->useDbConfig);
+		$this->assertSame('Article', get_class($user->Article));
+		$this->assertSame('test', $user->Article->useDbConfig);
 	}
 
 	/**

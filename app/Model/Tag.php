@@ -5,8 +5,8 @@ App::uses('AppModel', 'Model');
  * Tag Model
  *
  * @property Article $Article
- * @method Tag useMaster()
- * @method TagSlave useSlave()
+ * @method Tag getMasterInstance()
+ * @method TagSlave getSlaveInstance()
  */
 class Tag extends AppModel {
 

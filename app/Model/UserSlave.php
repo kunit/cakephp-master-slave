@@ -5,8 +5,8 @@ App::uses('User', 'Model');
  * UserSlave Model
  *
  * @property ArticleSlave $Article
- * @method User useMaster()
- * @method UserSlave useSlave()
+ * @method User getMasterInstance()
+ * @method UserSlave getSlaveInstance()
  */
 class UserSlave extends User {
 

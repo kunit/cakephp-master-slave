@@ -7,7 +7,7 @@ class MasterSlaveBehavior extends ModelBehavior {
 	 * @param Model $model
 	 * @return bool|null|object
 	 */
-	public function useMaster(Model $model) {
+	public function getMasterInstance(Model $model) {
 		$class = get_class($model);
 		$class = preg_replace('|Slave$|', '', $class);
 
@@ -24,7 +24,7 @@ class MasterSlaveBehavior extends ModelBehavior {
 	 * @param Model $model
 	 * @return bool|null|object
 	 */
-	public function useSlave(Model $model) {
+	public function getSlaveInstance(Model $model) {
 		$class = get_class($model);
 		$alias = $class;
 		$class = preg_replace('|Slave$|', '', $class) . 'Slave';

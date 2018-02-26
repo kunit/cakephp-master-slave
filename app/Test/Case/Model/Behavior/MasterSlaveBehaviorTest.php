@@ -71,7 +71,7 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 		$this->assertSame('test', $user->useDbConfig);
 		$this->assertSame('test', $user->Article->useDbConfig);
 
-		$actual = $this->User->useMaster()->find('all');
+		$actual = $this->User->getMasterInstance()->find('all');
 		$this->assertSame('test@example.co.jp', Hash::get($actual, '0.User.email'));
 		$this->assertSame('article test title', Hash::get($actual, '0.Article.0.title'));
 
@@ -91,7 +91,7 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 		$this->saveMaster();
 
 		/** @var UserSlave $user */
-		$user = $this->User->useSlave();
+		$user = $this->User->getSlaveInstance();
 
 		$this->assertSame('UserSlave', get_class($user));
 		$this->assertSame('test_slave', $user->useDbConfig);
@@ -122,7 +122,7 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 		$this->saveSlave();
 
 		/** @var User $user */
-		$user = $this->User->useSlave()->useMaster();
+		$user = $this->User->getSlaveInstance()->getMasterInstance();
 
 		$this->assertSame('User', get_class($user));
 		$this->assertSame('test', $user->useDbConfig);
@@ -159,7 +159,7 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 		$this->assertSame('test@example.co.jp', Hash::get($actual, '0.User.email'));
 		$this->assertSame('article test title', Hash::get($actual, '0.Article.0.title'));
 
-		$actual = $this->User->useSlave()->find('all', array(
+		$actual = $this->User->getSlaveInstance()->find('all', array(
 			'contain' => array(
 				'Article' => array(
 					'conditions' => array(
@@ -195,7 +195,7 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 		$this->assertSame('test@example.co.jp', Hash::get($actual, '0.User.email'));
 		$this->assertSame('tag test title', Hash::get($actual, '0.Tag.0.title'));
 
-		$actual = $this->Article->useSlave()->find('all', array(
+		$actual = $this->Article->getSlaveInstance()->find('all', array(
 			'contain' => array(
 				'User' => array(
 					'conditions' => array(
@@ -226,7 +226,7 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 		$this->saveSlave();
 
 		/** @var User $user */
-		$user = $this->User->useSlave()->useSlave();
+		$user = $this->User->getSlaveInstance()->getSlaveInstance();
 
 		$this->assertSame('UserSlave', get_class($user));
 		$this->assertSame('test_slave', $user->useDbConfig);
@@ -306,7 +306,7 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 		);
 
 		/** @var UserSlave $user */
-		$user = ClassRegistry::init('User')->useSlave();
+		$user = ClassRegistry::init('User')->getSlaveInstance();
 		$user->save($data);
 
 		$data = array(
@@ -319,7 +319,7 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 		);
 
 		/** @var ArticleSlave $article */
-		$article = ClassRegistry::init('Article')->useSlave();
+		$article = ClassRegistry::init('Article')->getSlaveInstance();
 		$article->save($data);
 
 		$data = array(
@@ -329,7 +329,7 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 		);
 
 		/** @var TagSlave $tag */
-		$tag = ClassRegistry::init('Tag')->useSlave();
+		$tag = ClassRegistry::init('Tag')->getSlaveInstance();
 		$tag->save($data);
 
 		$data = array(
@@ -340,7 +340,7 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 		);
 
 		/** @var ArticlesTagSlave $articlesTag */
-		$articlesTag = ClassRegistry::init('ArticlesTag')->useSlave();
+		$articlesTag = ClassRegistry::init('ArticlesTag')->getSlaveInstance();
 		$articlesTag->save($data);
 	}
 

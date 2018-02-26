@@ -51,15 +51,15 @@ class User extends AppModel {
 }
 ```
 
-### 4. Slave に切り替えながら find 等の処理する
+### 4. Slave 側のインスタンスを取得して find 等の処理する
 
 ```php
 <?php
 $this->User = ClassRegistry::init('User');
 
-$users = $this->User->useSlave()->find('all');
+$users = $this->User->getSlaveInstance()->find('all');
 ```
 
-`$this->User->useSlave()` の返却値は、 `UserSlave` モデルのインスタンスになる
+`$this->User->getSlaveInstance()` の返却値は、 `UserSlave` モデルのインスタンスになる
 
-また、useSlave をしたあとの、 `$this->User->Article` は、 `ArticleSlave` モデルのインスタンスになる
+また、getSlaveInstance をしたあとの、 `$this->User->Article` は、 `ArticleSlave` モデルのインスタンスになる

@@ -220,6 +220,30 @@ class MasterSlaveBehaviorTest extends CakeTestCase {
 	/**
 	 * @throws \Exception
 	 */
+	public function test_005_Slaveに2回切り替えてからfindする()
+	{
+		$this->saveMaster();
+		$this->saveSlave();
+
+		/** @var User $user */
+		$user = $this->User->useSlave()->useSlave();
+
+		$this->assertSame('UserSlave', get_class($user));
+		$this->assertSame('test_slave', $user->useDbConfig);
+		$this->assertSame('test_slave', $user->Article->useDbConfig);
+
+		$actual = $user->find('all');
+		$this->assertSame('test@example.co.jp', Hash::get($actual, '0.User.email'));
+		$this->assertSame('article test title', Hash::get($actual, '0.Article.0.title'));
+
+		$this->User = ClassRegistry::init('User');
+		$this->assertSame('test', $this->User->useDbConfig);
+		$this->assertSame('test', $this->User->Article->useDbConfig);
+	}
+
+	/**
+	 * @throws \Exception
+	 */
 	protected function saveMaster() {
 		$data = array(
 			'User' => array(

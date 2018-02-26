@@ -27,7 +27,7 @@ class MasterSlaveBehavior extends ModelBehavior {
 	public function useSlave(Model $model) {
 		$class = get_class($model);
 		$alias = $class;
-		$class .= 'Slave';
+		$class = preg_replace('|Slave$|', '', $class) . 'Slave';
 
 		ClassRegistry::removeObject($model->alias);
 		$slaveModel = ClassRegistry::init(array(

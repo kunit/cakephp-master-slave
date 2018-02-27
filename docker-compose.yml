@@ -2,7 +2,7 @@ version: '3'
 services:
   web:
     build: ./docker
-    image: php56-cakephp-master-slave
+    image: kunit/php56-apache-for-cakephp
     hostname: web
     container_name: web
     volumes:

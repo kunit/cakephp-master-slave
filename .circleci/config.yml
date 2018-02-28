@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: php:5.6-cli
+      - image: kunit/php56-apache-for-cakephp
       - image: circleci/mysql:5.7
         command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
         environment:
@@ -13,17 +13,6 @@ jobs:
     working_directory: /var/www/html
     steps:
       - checkout
-      - run:
-          name: setup PHP extensions
-          command: |
-            apt-get update
-            apt-get install -y curl git libmcrypt-dev libicu-dev zlib1g-dev mysql-client
-            docker-php-ext-install mcrypt pdo_mysql zip intl
-      - run:
-          name: composer install
-          command: |
-            curl -sSL https://getcomposer.org/installer | php
-            mv composer.phar /usr/local/bin/composer
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "app/composer.json" }}
@@ -45,7 +34,6 @@ jobs:
       - run:
           name: run tests
           command: |
-            echo 'date.timezone = Asia/Tokyo' > /usr/local/etc/php/php.ini
             cp app/Config/database.circleci.php app/Config/database.php
             mkdir -p ~/phpunit
             ./app/Console/cake test app AllTests --log-junit ~/phpunit/junit.xml

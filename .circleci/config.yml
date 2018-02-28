@@ -1,0 +1,47 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: kunit/php56-apache-for-cakephp
+      - image: circleci/mysql:5.7
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: app
+          MYSQL_USER: app
+          MYSQL_PASSWORD: app
+    working_directory: /var/www/html
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - composer-{{ arch }}-{{ checksum "app/composer.lock" }}
+          - composer-{{ arch }}-
+      - run: composer install --working-dir=app
+      - save_cache:
+          key: composer-{{ arch }}-{{ checksum "app/composer.lock" }}
+          paths:
+            - ~/.composer/cache
+      - run:
+          name: wait for MySQL
+          command: |
+              dockerize -wait tcp://127.0.0.1:3306 -timeout 1m
+      - run:
+          name: create database
+          command: |
+            mysql -u root -h 127.0.0.1 -e 'create database app_slave default character set utf8mb4 default collate utf8mb4_general_ci'
+            mysql -u root -h 127.0.0.1 -e 'create database test_app default character set utf8mb4 default collate utf8mb4_general_ci'
+            mysql -u root -h 127.0.0.1 -e 'create database test_app_slave default character set utf8mb4 default collate utf8mb4_general_ci'
+            mysql -u root -h 127.0.0.1 -e 'grant all on app_slave.* to app'
+            mysql -u root -h 127.0.0.1 -e 'grant all on test_app.* to app'
+            mysql -u root -h 127.0.0.1 -e 'grant all on test_app_slave.* to app'
+      - run:
+          name: run tests
+          command: |
+            cp app/Config/database.circleci.php app/Config/database.php
+            mkdir -p ~/phpunit
+            ./app/Console/cake test app AllTests --log-junit ~/phpunit/junit.xml
+      - store_test_results:
+          path: ~/phpunit
+      - store_artifacts:
+          path: ~/phpunit

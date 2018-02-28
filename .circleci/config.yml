@@ -1,0 +1,55 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: php:5.6-cli
+      - image: circleci/mysql:5.7
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: app
+          MYSQL_USER: app
+          MYSQL_PASSWORD: app
+    working_directory: /var/www/html
+    steps:
+      - checkout
+      - run:
+          name: setup PHP extensions
+          command: |
+            apt-get update
+            apt-get install -y curl git libmcrypt-dev libicu-dev zlib1g-dev mysql-client
+            docker-php-ext-install mcrypt pdo_mysql zip intl
+      - run:
+          name: composer install
+          command: |
+            curl -sSL https://getcomposer.org/installer | php
+            mv composer.phar /usr/local/bin/composer
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "app/composer.json" }}
+          - v1-dependencies-
+      - run: composer install --working-dir=app
+      - save_cache:
+          key: v1-dependencies-{{ checksum "app/composer.json" }}
+          paths:
+            - ~/.composer/cache
+      - run:
+          name: create database
+          command: |
+            mysql -u root -h 127.0.0.1 -e 'create database app_slave default character set utf8mb4 default collate utf8mb4_general_ci'
+            mysql -u root -h 127.0.0.1 -e 'create database test_app default character set utf8mb4 default collate utf8mb4_general_ci'
+            mysql -u root -h 127.0.0.1 -e 'create database test_app_slave default character set utf8mb4 default collate utf8mb4_general_ci'
+            mysql -u root -h 127.0.0.1 -e 'grant all on app_slave.* to app'
+            mysql -u root -h 127.0.0.1 -e 'grant all on test_app.* to app'
+            mysql -u root -h 127.0.0.1 -e 'grant all on test_app_slave.* to app'
+      - run:
+          name: run tests
+          command: |
+            echo 'date.timezone = Asia/Tokyo' > /usr/local/etc/php/php.ini
+            cp app/Config/database.circleci.php app/Config/database.php
+            mkdir -p ~/phpunit
+            ./app/Console/cake test app AllTests --log-junit ~/phpunit/junit.xml
+      - store_test_results:
+          path: ~/phpunit
+      - store_artifacts:
+          path: ~/phpunit

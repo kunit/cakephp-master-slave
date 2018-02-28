@@ -15,13 +15,17 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "app/composer.json" }}
-          - v1-dependencies-
+          - composer-{{ arch }}-{{ checksum "app/composer.lock" }}
+          - composer-{{ arch }}-
       - run: composer install --working-dir=app
       - save_cache:
-          key: v1-dependencies-{{ checksum "app/composer.json" }}
+          key: composer-{{ arch }}-{{ checksum "app/composer.lock" }}
           paths:
             - ~/.composer/cache
+      - run:
+          name: wait for MySQL
+          command: |
+              dockerize -wait tcp://127.0.0.1:3306 -timeout 1m
       - run:
           name: create database
           command: |
